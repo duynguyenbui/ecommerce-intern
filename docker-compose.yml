@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  mysqldb:
+    container_name: mysql
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: mysqlpw
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  nestapp:
+    container_name: nestapp
+    image: ecommerce-intern:latest
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 4001:4001
+    depends_on:
+      - mysql
+    environment:
+      SECRET_KEY: 12345678
+      JWT_EXPIRES_IN: 1d
+      DATABASE_NAME: e-commerce
+      USER_NAME: root
+      PASSWORD: mysqlpw
+      CLOUDINARY_CLOUD_NAME: 
+      CLOUDINARY_API_KEY: 
+      CLOUDINARY_API_SECRET: 
+      SMTP_HOST: sandbox.smtp.mailtrap.io
+      SMTP_PORT: 587
+      SMTP_USER: 
+      SMTP_PASSWORD: 
+      FROM_EMAIL: 
+      APPOTAPAY_PARTNER_CODE: APPOTAPAY
+      APPOTAPAY_API_KEY: 
+      APPOTAPAY_API_SECRETKEY: 
+      PORT: 3306
+      HOST: mysqldb
+      TYPE: mysql
+volumes:
+  mysql_data:
